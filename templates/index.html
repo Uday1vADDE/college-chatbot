@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>  Chatbot</title>
+    <style>
+        /* --- Page Layout --- */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            /* Background image */
+            background-image: url('https://static.vecteezy.com/system/resources/previews/002/920/996/non_2x/college-building-academic-building-university-in-traditional-english-style-with-trees-and-a-green-lawn-and-playground-illustration-on-white-background-free-vector.jpg'); 
+            background-size: 100;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        /* --- Chat Container --- */
+        #chat-container {
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.9); /* slightly transparent */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-radius: 15px;
+        }
+
+        /* --- Messages --- */
+        .message {
+            padding: 10px 14px;
+            margin: 5px;
+            border-radius: 12px;
+            max-width: 70%;
+            clear: both;
+            word-wrap: break-word;
+        }
+
+        .user { 
+            background-color: #d1e7ff; 
+            float: left; 
+        }
+
+        .bot { 
+            background-color: #c8ffc8; 
+            float: right; 
+        }
+
+        /* --- Input Container --- */
+        #input-container {
+            display: flex;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 16px;
+            margin-left: 5px;
+            border-radius: 12px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* --- Responsive for Mobile --- */
+        @media (max-width: 500px) {
+            #chat-container, #input-container {
+                width: 95%;
+            }
+            .message { max-width: 80%; }
+        }
+
+        h2 {
+            color: white;
+            text-shadow: 1px 1px 3px black;
+        }
+    </style>
+</head>
+<body>
+    <h2>College  Chatbot</h2>
+    <div id="chat-container"></div>
+
+    <div id="input-container">
+        <input type="text" id="user-input" placeholder="Type your message">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const chatContainer = document.getElementById('chat-container');
+
+            // Add user message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'message user';
+            userDiv.innerText = message;
+            chatContainer.appendChild(userDiv);
+
+            // Send to Flask
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            })
+            .then(res => res.json())
+            .then(data => {
+                // Add bot reply
+                const botDiv = document.createElement('div');
+                botDiv.className = 'message bot';
+                botDiv.innerText = data.reply;
+                chatContainer.appendChild(botDiv);
+
+                chatContainer.scrollTop = chatContainer.scrollHeight; // auto-scroll
+            });
+
+            input.value = '';
+        }
+
+        // Send message on Enter key
+        document.getElementById('user-input')
+            .addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') sendMessage();
+            });
+    </script>
+</body>
+</html>

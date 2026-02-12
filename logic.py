@@ -15,3 +15,5 @@ def get_reply(message):
         return "Thank you for contacting the College Helpdesk. Have a great day!"
     else:
         return "I didn't get it. Kindly mail helpdesk@college.edu for more details."
+
+

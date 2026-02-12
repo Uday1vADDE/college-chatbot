@@ -1,18 +1,21 @@
-# app.py
-from flask import Flask, request, jsonify
-from logic import get_reply  # import chatbot function
+from flask import Flask, render_template, request, jsonify
+from logic import get_reply
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return render_template('index.html')
+
 @app.route('/chat', methods=['POST'])
 def chat():
-    data = request.json
-    user_message = data.get('message')
+    data = request.get_json()
+    user_message = data.get('message', '')
     reply = get_reply(user_message)
     return jsonify({'reply': reply})
 
-import os
-
 if __name__ == "__main__":
+    import os
+    # Use PORT environment variable if set (Render), else fallback to 5000
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
