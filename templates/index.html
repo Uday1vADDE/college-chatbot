@@ -13,11 +13,11 @@
             min-height: 100vh;
             margin: 0;
             /* Background image */
-            background-image: url('https://static.vecteezy.com/system/resources/previews/002/920/996/non_2x/college-building-academic-building-university-in-traditional-english-style-with-trees-and-a-green-lawn-and-playground-illustration-on-white-background-free-vector.jpg'); 
+            background-image: url('{{ url_for("static", filename="college_bg.jpg") }}');
             background-size: 100;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
+            background-attachment: fixed; 
         }
 
         /* --- Chat Container --- */
