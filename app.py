@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from logic import get_reply
+import os
 
 app = Flask(__name__)
 
@@ -15,7 +16,7 @@ def chat():
     return jsonify({'reply': reply})
 
 if __name__ == "__main__":
-    import os
+
     # Use PORT environment variable if set (Render), else fallback to 5000
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
